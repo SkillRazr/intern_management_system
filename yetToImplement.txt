@@ -1,0 +1,2 @@
+search user
+visit profile send email button
