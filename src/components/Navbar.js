@@ -1,9 +1,14 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import AddInternModal from './AddInternModal';
+import { useState } from 'react';
 
 export default function Navbar() {
     
     const router = useRouter();
+    const [showModal, setShowModal] = useState(false)
 
     function isActiveLink(href) {
         return router.pathname === href ? 'border-b-4 border-[#ff1493]' : '';
@@ -27,7 +32,14 @@ export default function Navbar() {
                 <Link href="/feedback" className='p-1.5'>Feedback</Link>
             </p>
         </li>
+        <li>
+          <FontAwesomeIcon icon={faPlus} className='cursor-pointer' onClick={() => {setShowModal(true)}}/>
+        </li>
       </ul>
+      {
+        showModal &&
+        <AddInternModal onClose={() => setShowModal(false)}/>
+      }
     </nav>
   );
 };

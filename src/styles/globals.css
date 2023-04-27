@@ -25,3 +25,24 @@ body {
     )
     rgb(var(--background-start-rgb));
 } */
+
+.intern-form-label {
+  font-size: 12px;
+  color: gray;
+  margin-top: 20px;
+}
+
+.intern-form-input {
+  width: 100%;
+  outline: none;
+  padding: 5px 5px 5px 10px;
+  border: 1px solid gainsboro;
+  border-radius: 5px;
+  font-size: 17px;
+  font-weight: 600;
+  color: black;
+}
+
+.date-container > label {
+  width: 50%;
+}
