@@ -3,7 +3,7 @@ import '@/styles/globals.css'
 
 export default function App({ Component, pageProps }) {
   return (
-    <div>
+    <div className='border border-black rounded apps'>
       <Navbar />
       <Component {...pageProps} />
     </div>

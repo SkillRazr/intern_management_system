@@ -2,29 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-/* :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-} */
+  max-width: 350px;
+  width: 100%;
+  float: right;
+  margin-right: 30px;
+}
+
+.apps {
+  overflow-y: auto;
+}
 
 .intern-form-label {
   font-size: 12px;
@@ -43,6 +30,6 @@ body {
   color: black;
 }
 
-.date-container > label {
+.two-labels-container > label {
   width: 50%;
 }
