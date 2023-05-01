@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { db } from '../firebase'
-import { collection, onSnapshot } from 'firebase/firestore'
 import InternDetails from './InternDetails'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
+import { getInterns } from '../apiHelper';
 
 
 export default function Attendance() {
@@ -19,29 +18,15 @@ export default function Attendance() {
     }, [searchQuery]);
 
     useEffect(() => {
-        // Get a reference to the "interns" collection
-        const internsCollection = collection(db, 'interns');
-    
-        // Listen for changes to the collection
-        // const getInternData = 
-        onSnapshot(internsCollection, (snapshot) => {
-          const internsData = [];
-    
-          // Convert the snapshot data to an array of objects
+        const loadInterns = async () => {
+          const response = await getInterns();
           
-          snapshot.forEach((doc) => {
-            internsData.push({ id: doc.id, data: doc.data() });
-          });
-    
-          // Update the state with the array of objects
-          setInternsList(internsData);
-        });
-
-    
-        // // Unsubscribe from the collection when the component unmounts
-        // return () => {
-        //   getInternData();
-        // };
+          if (response.status === 1) {
+            setInternsList(response.data);
+          }
+        }
+       
+        loadInterns();
       }, []);
       
 
