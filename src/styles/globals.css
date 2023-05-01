@@ -33,3 +33,19 @@ body {
 .two-labels-container > label {
   width: 50%;
 }
+
+.modal-form-container {
+  box-shadow: 3px 5px 10px rgb(0 0 0 / 5%),
+    -3px -1px 10px rgb(0 0 0 / 5%);
+}
+
+.intern-tags-container {
+  width: 80%;
+  border: 1px solid black;
+  padding: 10px;
+  margin: 5px 0px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}

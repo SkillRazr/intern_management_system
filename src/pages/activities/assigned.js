@@ -69,7 +69,7 @@ export default function Assigned() {
                             <p>{activity.activity}</p>
                             <div className="flex justify-between items-center mt-2">
                                 <p className={`${checkDueDate(activity.dueDate)} px-1`}>{activity.dueDate}</p>
-                                <p className="w-6 text-center cursor-pointer border border-black rounded-full">{activity.assignedTo.charAt(0).toUpperCase()}</p>
+                                <Link href={`/intern/${activity.internId}`} className="w-6 text-center cursor-pointer border border-black rounded-full">{activity.assignedTo.charAt(0).toUpperCase()}</Link>
                             </div>
                         </div>        
                     ))

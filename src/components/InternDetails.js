@@ -8,6 +8,8 @@ import { faCalendarPlus, faPen } from '@fortawesome/free-solid-svg-icons';
 export default function InternDetails({ intern, selectAllCheckbox }) {
 
   const [isChecked, setIsChecked] = useState(false);
+  const [openNotes, setOpenNotes] = useState(false)
+  const [showActivityForm, setShowActivityForm] = useState(false)
 
     const updateAttendance = async (value) => {
         try {
@@ -35,13 +37,14 @@ export default function InternDetails({ intern, selectAllCheckbox }) {
           console.error("Error updating attendance: ", error);
         }
       };
+      
 
       useEffect(() => {
         setIsChecked(selectAllCheckbox)
       }, [selectAllCheckbox])
 
       const toUserPage = (id) => {
-        Router.push(`/user/${id}`)
+        Router.push(`/intern/${id}`)
       }
 
   return (
@@ -54,10 +57,29 @@ export default function InternDetails({ intern, selectAllCheckbox }) {
           <p className='ml-2 text-xs text-zinc-400'>{new Date(intern.data.joinedOn?.toDate()).toLocaleDateString(navigator.language, {day: 'numeric', month: 'short', year: 'numeric'})}</p>
         </div>
         <div className='icon-container w-2/5 flex justify-evenly items-center'>
-          <FontAwesomeIcon icon={faPen} className='cursor-pointer' />
-          <FontAwesomeIcon icon={faCalendarPlus} className='cursor-pointer text-lg' />
+          <FontAwesomeIcon icon={faPen} className='cursor-pointer' onClick={() => setOpenNotes(true)}/>
+          <FontAwesomeIcon icon={faCalendarPlus} className='cursor-pointer text-lg' onClick={() => setShowActivityForm(true)}/>
           <input type="checkbox" checked={isChecked} onChange={(e) => {setIsChecked(e.target.checked)}}/>
         </div>
+        {
+          openNotes && (
+            <div className='w-full h-full fixed top-0 left-0 flex items-center justify-center' onClick={() => setOpenNotes(false)}> 
+              <form className='modal-form-container border border-black rounded p-2' onClick={e => e.stopPropagation()}>
+                <textarea type='text' placeholder='Notes' className='w-80 h-44 outline-none'/>
+              </form>
+            </div>
+          )
+        }
+        {
+          showActivityForm && (
+            <div className='w-full h-full fixed top-0 left-0 flex items-center justify-center' onClick={() => setShowActivityForm(false)}>
+              <form className='w-96 modal-form-container rounded p-2' onClick={e => e.stopPropagation()}>
+                <textarea type='text' className='w-full h-24 rounded outline-none border border-gray-500 p-2' placeholder='Assign activity'/>
+                <input type='date' className='rounded outline-none border border-gray-500 p-1 mt-1'/>
+              </form>
+            </div>
+          )
+        }
       </div>
   )
 }
