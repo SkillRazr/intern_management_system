@@ -8,24 +8,36 @@ export default function AddInternModal({ onClose }) {
           </div>
           <form className="flex flex-col justify-center">
 
-            <label htmlFor='name' className="intern-form-label">
-              <p>Name</p>
-              <input type='text' name='name' id='name' className="intern-form-input"/>
-            </label>
+            <div className="two-labels-container flex">
+              <label htmlFor='name' className="intern-form-label">
+                <p>Name</p>
+                <input type='text' name='name' id='name' className="intern-form-input" required/>
+              </label>
+              <label htmlFor='phoneNo' className="intern-form-label ml-2">
+                <p>Phone number</p>
+                <input type='tel' name='phoneNo' id='phoneNo' pattern="/^\+\d{2}\s\d{10}$/" className="intern-form-input" placeholder="+91 1234567890" required/>
+              </label>
+
+            </div>
 
             <label htmlFor='email' className="intern-form-label"> 
               <p>Email</p>
-              <input type='email' name='email' id='email' className="intern-form-input"/>
+              <input type='email' name='email' id='email' pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$" className="intern-form-input" required/>
             </label>
 
-            <div className="date-container flex">
+            <label htmlFor='github' className="intern-form-label"> 
+              <p>GitHub URL</p>
+              <input type='url' name='github' id='github' pattern="^https:\/\/github\.com\/.+$" className="intern-form-input"/>
+            </label>
+
+            <div className="two-labels-container flex">
               <label htmlFor='join' className="intern-form-label">
                 <p>Joined date</p>
-                <input type='text' name='join' id='join' className="intern-form-input"/>
+                <input type='date' name='join' id='join' className="intern-form-input" required/>
               </label>
               <label htmlFor='end' className="intern-form-label ml-2">
                 <p>End date</p>
-                <input type='text' name='end' id='end' className="intern-form-input"/>
+                <input type='date' name='end' id='end' className="intern-form-input"/>
               </label>
             </div>
 

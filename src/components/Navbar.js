@@ -11,20 +11,21 @@ export default function Navbar() {
     const [showModal, setShowModal] = useState(false)
 
     function isActiveLink(href) {
-        return router.pathname === href ? 'border-b-4 border-[#ff1493]' : '';
+      const regex = new RegExp(`^${href}(\/.*)*$`, 'i');
+      return regex.test(router.pathname) ? 'border-b-4 border-[#ff1493]' : '';
     };
 
   return (
-    <nav>
-      <ul className='flex items-center justify-evenly min-h-[50px]'>
+    <nav className='min-h-[50px]'>
+      <ul className='flex items-center justify-evenly'>
         <li className={`${isActiveLink('/')} px-1`}>
             <p className={`px-1`}>
-                <Link href="/" className='p-1.5'>Attendance</Link>
+                <Link href="/" className='p-1.5'>Interns</Link>
             </p>
         </li>
         <li className={`${isActiveLink('/activities')} px-1`}>
             <p className={`px-1`}>
-                <Link href="/activities" className='p-1.5'>Activities</Link>
+                <Link href="/activities/assigned" className='p-1.5'>Activities</Link>
             </p>
         </li>
         <li className={`${isActiveLink('/feedback')} px-1`}>

@@ -2,29 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-/* :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-} */
+  max-width: 350px;
+  width: 100%;
+  float: right;
+  margin-right: 30px;
+}
+
+.apps {
+  overflow-y: auto;
+}
 
 .intern-form-label {
   font-size: 12px;
@@ -43,6 +30,22 @@ body {
   color: black;
 }
 
-.date-container > label {
+.two-labels-container > label {
   width: 50%;
+}
+
+.modal-form-container {
+  box-shadow: 3px 5px 10px rgb(0 0 0 / 5%),
+    -3px -1px 10px rgb(0 0 0 / 5%);
+}
+
+.intern-tags-container {
+  width: 80%;
+  border: 1px solid black;
+  padding: 10px;
+  margin: 5px 0px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
 }
