@@ -4,7 +4,7 @@ export const getInterns = async () => {
       {
         headers: {
           "Content-Type": "application/json",
-            "skillrazr-sub-app": process.env.NEXT_PUBLIC_INTERN_API_KEY
+            "skillrazr-sub-app": 'interns!1234#@234_hello'
         },
         method: "POST",
         body: JSON.stringify({}),
@@ -19,7 +19,7 @@ export const getInterns = async () => {
       {
         headers: {
           "Content-Type": "application/json",
-            "skillrazr-sub-app": process.env.NEXT_PUBLIC_INTERN_API_KEY
+            "skillrazr-sub-app": 'interns!1234#@234_hello'
         },
         method: "POST",
         body: JSON.stringify(payload),

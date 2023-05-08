@@ -20,17 +20,17 @@ export default function Navbar() {
       <ul className='flex items-center justify-evenly'>
         <li className={`${isActiveLink('/')} px-1`}>
             <p className={`px-1`}>
-                <Link href="/" className='p-1.5'>Interns</Link>
+                <Link href="/" className='p-1.5'>Attendance</Link>
             </p>
         </li>
-        <li className={`${isActiveLink('/activities')} px-1`}>
+        {/* <li className={`${isActiveLink('/activities')} px-1`}>
             <p className={`px-1`}>
                 <Link href="/activities/assigned" className='p-1.5'>Activities</Link>
             </p>
-        </li>
-        <li className={`${isActiveLink('/feedback')} px-1`}>
+        </li> */}
+        <li className={`${isActiveLink('/notes')} px-1`}>
             <p className={`px-1`}>
-                <Link href="/feedback" className='p-1.5'>Feedback</Link>
+                <Link href="/notes" className='p-1.5'>Notes</Link>
             </p>
         </li>
         <li>

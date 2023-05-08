@@ -5,6 +5,7 @@ import { db } from "../../firebase";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons'
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { getInterns } from "@/apiHelper";
 
 export default function intern() {
 
@@ -14,21 +15,16 @@ export default function intern() {
     const [internData, setInternData] = useState(null);
 
   useEffect(() => {
-    async function fetchInternData() {
-
-      let internDoc;
-      if (internId) {
-        const fetchintern = doc(db, 'interns', internId);
-        internDoc = await getDoc(fetchintern);  
-      }
-    
-      if (internDoc) {
-        const data = internDoc.data();
+    const loadInterns = async () => {
+      const response = await getInterns();
+      
+      if (response.status === 1) {
+        const data = response.data.find((intern) => intern.email === internId)
         setInternData(data);
       }
     }
-
-    fetchInternData();
+   
+    loadInterns();
   }, [internId]);
 
   function sendEmail() {
@@ -39,17 +35,13 @@ export default function intern() {
       <div className="internpage-container h-screen">
         <div className="intern-container-1 flex flex-col items-center">
           <div className="w-60 h-60 bg-gray-50 border border-black cursor-pointer rounded-full flex items-center justify-center mt-10">
-            <span className="text-9xl mb-10">{internData?.name.charAt(0)}</span>
+            <span className="text-9xl mb-10">{internData?.name?.charAt(0)}</span>
           </div>
           <div className="min-h-[50px] flex items-center mt-4">
             <FontAwesomeIcon icon={faEnvelope} className="text-2xl cursor-pointer" onClick={sendEmail}/>
           </div>
         </div>
         <div className="intern-container-2 flex flex-col items-center">
-          <div className="intern-tags-container">
-            <p className="intern-tags">Assign a Activity</p>
-            <FontAwesomeIcon icon={faAngleRight}/>
-          </div>
           <div className="intern-tags-container">
             <p className="intern-tags">Add notes</p>
             <FontAwesomeIcon icon={faAngleRight}/>
