@@ -23,11 +23,6 @@ export default function Navbar() {
                 <Link href="/" className='p-1.5'>Attendance</Link>
             </p>
         </li>
-        {/* <li className={`${isActiveLink('/activities')} px-1`}>
-            <p className={`px-1`}>
-                <Link href="/activities/assigned" className='p-1.5'>Activities</Link>
-            </p>
-        </li> */}
         <li className={`${isActiveLink('/notes')} px-1`}>
             <p className={`px-1`}>
                 <Link href="/notes" className='p-1.5'>Notes</Link>

@@ -1,27 +1,33 @@
 import { useEffect, useState } from 'react';
 import Router, { useRouter } from 'next/router';
 import { doc, updateDoc, Timestamp, getDoc } from "firebase/firestore";
-import { db } from '../firebase'
+import { db1 } from '../firebase'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCalendarPlus, faPen } from '@fortawesome/free-solid-svg-icons';
+import { faPen } from '@fortawesome/free-solid-svg-icons';
+import { saveNote } from '@/apiHelper';
 
 export default function InternDetails({ intern, selectAllCheckbox, index, handleCheckboxChange }) {
 
   const [isChecked, setIsChecked] = useState(false);
   const [openNotes, setOpenNotes] = useState(false);
+  const [noteType, setNoteType] = useState("Normal")
   const [notes, setNotes] = useState("")
-  // const [showActivityForm, setShowActivityForm] = useState(false)
   const router = useRouter()
 
-  const saveNote = async (e) => {
+  async function handlesaveNote(e) {
     e.preventDefault()
-    const internRef = doc(db, "interns", intern.email);
-    const internDoc = await getDoc(internRef)
-    const notesArray = internDoc.data().notes || []
-    notesArray.push(notes)
-    await updateDoc(internRef, { notes: notesArray})
+    try {
+      const response = await saveNote({notes})
+      if (response.status === 1) {
+        setShowPopup(true)
+        setNotes("")
+        setOpenNotes(false)
+      }  
+    } catch (error) {
+      console.log(error.message);
+    }
   }
-      
+
       useEffect(() => {
         setIsChecked(selectAllCheckbox)
       }, [selectAllCheckbox])
@@ -52,34 +58,27 @@ export default function InternDetails({ intern, selectAllCheckbox, index, handle
             router.pathname === "/notes" &&
             <>
               <FontAwesomeIcon icon={faPen} className='cursor-pointer' onClick={() => setOpenNotes(true)}/>
-              {/* <FontAwesomeIcon icon={faCalendarPlus} className='cursor-pointer text-lg' onClick={() => setShowActivityForm(true)}/> */}
             </>
           }
           {
             router.pathname === "/" &&
-            <input type="checkbox" checked={isChecked} onChange={(e) => {setIsChecked(e.target.checked);}}/>
+            <input type="checkbox" checked={isChecked} className='w-4 h-4 checked:bg-black' onChange={(e) => {setIsChecked(e.target.checked);}}/>
           }
         </div>
         {
           openNotes && (
             <div className='w-full h-full fixed top-0 left-0 flex items-center justify-center' onClick={() => setOpenNotes(false)}> 
-              <form className='modal-form-container flex flex-col rounded p-2' onClick={e => e.stopPropagation()} onSubmit={saveNote}>
+              <form className='modal-form-container flex flex-col rounded p-2' onClick={e => e.stopPropagation()} onSubmit={handlesaveNote}>
+              <select id="notes" name="notes" className='outline-none mb-4' onChange={(e) => {setNoteType(e.target.value)}}>
+                <option value="Normal">Normal</option>
+                <option value="Alert">Alert</option>
+              </select>
                 <textarea type='text' placeholder='Notes...' className='w-80 h-44 p-1 border border-black outline-none' onChange={(e) => {setNotes(e.target.value)}}/>
                 <button type='submit' className='w-full bg-black mt-4 text-white p-2 rounded'>Save Note</button>
               </form>
             </div>
           )
         }
-        {/* {
-          showActivityForm && (
-            <div className='w-full h-full fixed top-0 left-0 flex items-center justify-center' onClick={() => setShowActivityForm(false)}>
-              <form className='w-96 modal-form-container rounded p-2' onClick={e => e.stopPropagation()}>
-                <textarea type='text' className='w-full h-24 rounded outline-none border border-gray-500 p-2' placeholder='Assign activity'/>
-                <input type='date' className='rounded outline-none border border-gray-500 p-1 mt-1'/>
-              </form>
-            </div>
-          )
-        } */}
       </div>
   )
 }

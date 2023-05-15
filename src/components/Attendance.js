@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react'
 import InternDetails from './InternDetails'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
-import { getInterns } from '../apiHelper';
-import { db } from '../firebase'
-import { collection, getDocs } from 'firebase/firestore';
+import { getInterns, updateAttendance } from '../apiHelper';
+import { db1 } from '../firebase'
+import { collection, getDocs, writeBatch } from 'firebase/firestore';
+import Popup from './Popup';
 
 
 export default function Attendance() {
@@ -14,6 +15,7 @@ export default function Attendance() {
     const [searchQuery, setSearchQuery] = useState("")
     const [selectAllCheckbox, setSelectAllCheckbox] = useState(false)
     const [checkboxValues, setCheckboxValues] = useState([]);
+    const [showPopup, setShowPopup] = useState(false)
 
     useEffect(() => {
       setCheckboxValues(internsList.map(() => false));
@@ -28,34 +30,6 @@ export default function Attendance() {
         const newValues = [...checkboxValues];
         newValues[index] = isChecked;
         setCheckboxValues(newValues);  
-      }
-    };
-  
-    const handleUpdateAttendance = async (e) => {
-      e.preventDefault()
-      try {
-        const now = new Date();
-        const internsRef = collection(db, "interns");
-        const internsQuery = await getDocs(internsRef);
-        // const batch = writeBatch(db);
-        console.log(1);
-        // internsQuery.forEach((doc, index) => {
-        //   const isChecked = checkboxValues[index];
-        //   const attendanceUpdate = {
-        //     "attended": isChecked,
-        //     "date": now
-        //   }
-        //   const attendanceArray = doc.data().attendance || [];
-        //   attendanceArray.push(attendanceUpdate);
-        //   batch.update(doc.ref, { attendance: attendanceArray });
-        // });
-        console.log(2);
-  
-        // await batch.commit();
-  
-        console.log("Attendance updated successfully for all interns!");
-      } catch (error) {
-        console.log("Error updating attendance for all interns: ", error.message);
       }
     };
 
@@ -75,7 +49,20 @@ export default function Attendance() {
        
         loadInterns();
       }, []);
-      
+
+      async function handleUpdateAttendance(e) {
+        e.preventDefault()
+        try {
+          const response = await updateAttendance({checkboxValues})
+          if (response.status === 1) {
+            setShowPopup(true)
+            setSelectAllCheckbox(false)
+          }
+        } catch (error) {
+          console.log(error.message);
+        }
+        
+      }
 
       const renderInternsList = () => {
         const list = searchList.length === 0 ? internsList : searchList
@@ -93,7 +80,7 @@ export default function Attendance() {
     <form className='flex justify-between' onSubmit={handleUpdateAttendance}> 
       <label htmlFor='selectAll' className='flex ml-4 items-center'>
         <p className='mr-2'>Select all</p>
-        <input type='checkbox' id='selectAll' onChange={(e) => {setSelectAllCheckbox(e.target.checked)}}/>
+        <input type='checkbox' className='w-4 h-4' id='selectAll' onChange={(e) => {setSelectAllCheckbox(e.target.checked)}}/>
       </label>
       <button type='submit' className='cursor-pointer bg-black text-white rounded m-1 px-2'>Mark attendance</button>
     </form>
@@ -102,6 +89,10 @@ export default function Attendance() {
       internsList.length !== 0 && renderInternsList()
     }
     </div>
+    {
+      showPopup &&
+      <Popup text={"success"} iconColor={"green-700"} textColor={"green-700"} bgColor={"green-200"} showPopup={showPopup} setShowPopup={setShowPopup}/>     
+    }
     </>
   )
 }

@@ -15,10 +15,16 @@ export default function AddInternModal({ onClose }) {
     e.preventDefault()
     try {
       const response = await addIntern({name, mobileNo, email, github, joinDate, endDate, notes})
-      console.log(response);
+      if (response.status === 1) {
+        setShowPopup(true)
+        const formElement = document.getElementById("intern-form")
+        formElement.reset()
+        onClose()
+      }
     } catch (error) {
       console.log(error.message)
     }
+    
   }
   
   return (
@@ -27,7 +33,7 @@ export default function AddInternModal({ onClose }) {
           <div className="mb-2">
             <h6 className="font-bold text-xl font-sans">Intern details</h6>
           </div>
-          <form className="flex flex-col justify-center" onSubmit={internForm}>
+          <form id="intern-form" className="flex flex-col justify-center" onSubmit={internForm}>
 
             <div className="two-labels-container flex">
               <label htmlFor='name' className="intern-form-label">

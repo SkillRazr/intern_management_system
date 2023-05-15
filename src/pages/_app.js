@@ -6,7 +6,6 @@ export default function App({ Component, pageProps }) {
     <div className='border border-black rounded apps'>
       <Navbar />
       <Component {...pageProps} />
-    </div>
-      
+    </div>    
   )
 }
