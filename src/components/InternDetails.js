@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 import Router, { useRouter } from 'next/router';
-import { doc, updateDoc, Timestamp, getDoc } from "firebase/firestore";
-import { db1 } from '../firebase'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 import { saveNote } from '@/apiHelper';
@@ -12,12 +10,14 @@ export default function InternDetails({ intern, selectAllCheckbox, index, handle
   const [openNotes, setOpenNotes] = useState(false);
   const [noteType, setNoteType] = useState("Normal")
   const [notes, setNotes] = useState("")
+  const [noteDate, setNoteDate] = useState(() => new Date().toLocaleDateString('en-GB').split('/').reverse().join('-'));
   const router = useRouter()
 
   async function handlesaveNote(e) {
     e.preventDefault()
     try {
-      const response = await saveNote({notes})
+      const email = intern.email
+      const response = await saveNote({docId: email, date: noteDate, note: {type: noteType, message: notes }})
       if (response.status === 1) {
         setShowPopup(true)
         setNotes("")
@@ -35,12 +35,12 @@ export default function InternDetails({ intern, selectAllCheckbox, index, handle
       if (router.pathname === "/") {
         useEffect(() => {
           if(isChecked === true || isChecked === false){
-            handleCheckboxChange(index, isChecked)
+            handleCheckboxChange(index, isChecked, intern.email)
           }
         }, [isChecked])
       }
 
-      const toUserPage = (id) => {
+      function toUserPage(id) {
         Router.push(`/intern/${id}`)
       }
 
@@ -69,10 +69,13 @@ export default function InternDetails({ intern, selectAllCheckbox, index, handle
           openNotes && (
             <div className='w-full h-full fixed top-0 left-0 flex items-center justify-center' onClick={() => setOpenNotes(false)}> 
               <form className='modal-form-container flex flex-col rounded p-2' onClick={e => e.stopPropagation()} onSubmit={handlesaveNote}>
-              <select id="notes" name="notes" className='outline-none mb-4' onChange={(e) => {setNoteType(e.target.value)}}>
-                <option value="Normal">Normal</option>
-                <option value="Alert">Alert</option>
-              </select>
+                <div className='flex items-center mb-4'>
+                  <select id="notes" name="notes" value={noteType} className='outline-none w-1/2 mr-1' onChange={(e) => {setNoteType(e.target.value)}}>
+                    <option value="Info">Info</option>
+                    <option value="Alert">Alert</option>
+                  </select>
+                  <input type='date' value={noteDate} className='outline-none w-1/2' onChange={(e) => {setNoteDate(e.target.value)}}/>
+                </div>
                 <textarea type='text' placeholder='Notes...' className='w-80 h-44 p-1 border border-black outline-none' onChange={(e) => {setNotes(e.target.value)}}/>
                 <button type='submit' className='w-full bg-black mt-4 text-white p-2 rounded'>Save Note</button>
               </form>

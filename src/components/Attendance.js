@@ -4,9 +4,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { getInterns, updateAttendance } from '../apiHelper';
 import { db1 } from '../firebase'
-import { collection, getDocs, writeBatch } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, updateDoc, writeBatch } from 'firebase/firestore';
 import Popup from './Popup';
-
+import DatePicker from 'react-multi-date-picker';
+import Icon from 'react-multi-date-picker/components/icon';
 
 export default function Attendance() {
 
@@ -16,6 +17,8 @@ export default function Attendance() {
     const [selectAllCheckbox, setSelectAllCheckbox] = useState(false)
     const [checkboxValues, setCheckboxValues] = useState([]);
     const [showPopup, setShowPopup] = useState(false)
+    const [selectedDates, setSelectedDates] = useState([Date.now()]);
+    console.log(checkboxValues);
 
     useEffect(() => {
       setCheckboxValues(internsList.map(() => false));
@@ -25,11 +28,15 @@ export default function Attendance() {
       setCheckboxValues(internsList.map(() => selectAllCheckbox));
     }, [selectAllCheckbox]);
 
-    const handleCheckboxChange = (index, isChecked) => {
-      if (isChecked === true || isChecked === false) {
+    function handleCheckboxChange (index, isChecked, email) {
+      if (isChecked === true) {
         const newValues = [...checkboxValues];
-        newValues[index] = isChecked;
+        newValues[index] = email;
         setCheckboxValues(newValues);  
+      }else {
+        const newValues = [...checkboxValues]
+        newValues[index] = false
+        setCheckboxValues(newValues)
       }
     };
 
@@ -53,7 +60,7 @@ export default function Attendance() {
       async function handleUpdateAttendance(e) {
         e.preventDefault()
         try {
-          const response = await updateAttendance({checkboxValues})
+          const response = await updateAttendance({docIds: ["jatinsharma@gmail1.com"], date: selectedDates})
           if (response.status === 1) {
             setShowPopup(true)
             setSelectAllCheckbox(false)
@@ -64,7 +71,7 @@ export default function Attendance() {
         
       }
 
-      const renderInternsList = () => {
+      function renderInternsList() {
         const list = searchList.length === 0 ? internsList : searchList
         return list.map((intern, index) => (
             < InternDetails intern={intern} handleCheckboxChange={handleCheckboxChange} index={index} selectAllCheckbox={selectAllCheckbox} />
@@ -77,12 +84,23 @@ export default function Attendance() {
         <FontAwesomeIcon icon={faMagnifyingGlass} className='ml-4'/>
         <input type='text' name='search' value={searchQuery} className='p-2 outline-none w-full' placeholder='Enter intern name...' onChange={(e) => {setSearchQuery(e.target.value)}}/>
     </form>
-    <form className='flex justify-between' onSubmit={handleUpdateAttendance}> 
+    <form className='flex justify-between' onSubmit={handleUpdateAttendance}>
       <label htmlFor='selectAll' className='flex ml-4 items-center'>
         <p className='mr-2'>Select all</p>
         <input type='checkbox' className='w-4 h-4' id='selectAll' onChange={(e) => {setSelectAllCheckbox(e.target.checked)}}/>
       </label>
-      <button type='submit' className='cursor-pointer bg-black text-white rounded m-1 px-2'>Mark attendance</button>
+      <div className='flex items-center'>
+        <DatePicker
+          value={selectedDates}
+          onChange={array => { 
+            const dateArray = array.join()
+            setSelectedDates(dateArray.split(','))
+          }}
+          multiple
+          render={<Icon />}
+        />
+        <button type='submit' className='cursor-pointer bg-black text-white rounded m-1 px-2'>Mark attendance</button>
+      </div>
     </form>
     <div className='interns-list-container flex flex-col items-center bg-black h-screen'>
     {

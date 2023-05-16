@@ -18,10 +18,12 @@
     "eslint-config-next": "13.3.1",
     "firebase": "^9.20.0",
     "firebase-tools": "^11.28.0",
+    "moment": "^2.29.4",
     "next": "13.3.1",
     "postcss": "8.4.23",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-multi-date-picker": "^4.0.0",
     "tailwindcss": "3.3.1"
   }
 }

@@ -1,5 +1,5 @@
 import { addIntern } from "@/apiHelper"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 export default function AddInternModal({ onClose }) {
 
@@ -11,7 +11,7 @@ export default function AddInternModal({ onClose }) {
   const [endDate, setEndDate] = useState("")
   const [notes, setNotes] = useState([])
 
-  const internForm = async (e) => {
+  async function internForm(e) {
     e.preventDefault()
     try {
       const response = await addIntern({name, mobileNo, email, github, joinDate, endDate, notes})

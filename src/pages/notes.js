@@ -29,7 +29,7 @@ export default function Notes() {
       }, []);
       
 
-      const renderInternsList = () => {
+      function renderInternsList() {
         const list = searchList.length === 0 ? internsList : searchList
         return list.map((intern) => (
             < InternDetails key={intern.id} intern={intern} />
