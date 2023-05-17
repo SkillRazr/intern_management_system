@@ -17,7 +17,7 @@ export default function InternDetails({ intern, selectAllCheckbox, index, handle
     e.preventDefault()
     try {
       const email = intern.email
-      const response = await saveNote({docId: email, date: noteDate, note: {type: noteType, message: notes }})
+      const response = await saveNote({docId: email, date: noteDate, note: {type: noteType, message: notes}})
       if (response.status === 1) {
         setShowPopup(true)
         setNotes("")
@@ -35,7 +35,7 @@ export default function InternDetails({ intern, selectAllCheckbox, index, handle
       if (router.pathname === "/") {
         useEffect(() => {
           if(isChecked === true || isChecked === false){
-            handleCheckboxChange(index, isChecked, intern.email)
+            handleCheckboxChange(isChecked, intern.email)
           }
         }, [isChecked])
       }
@@ -47,7 +47,7 @@ export default function InternDetails({ intern, selectAllCheckbox, index, handle
   return (
       <div className='intern-container w-[98%] flex justify-between items-center border border-black rounded p-1.5 mt-1 mx-1 bg-white'>
         <div className="w-9 h-8 bg-gray-50 border border-black cursor-pointer rounded-full flex items-center justify-center" onClick={() => toUserPage(intern.email)}>
-          <span className="text-3xl mb-2">{intern.name?.charAt(0)}</span>
+          <span className="text-2xl mb-1">{intern.name?.charAt(0).toUpperCase()}</span>
         </div>
         <div className='intern-details-container w-9/12'>
           <p className='ml-2 text-xl font-medium'>{intern.name.charAt(0).toUpperCase() + intern.name?.slice(1)}</p>

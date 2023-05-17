@@ -19,16 +19,16 @@ export default function intern() {
     const [showNotes, setShowNotes] = useState(false)
     const [showPopup, setShowPopup] = useState(false)
 
-    useEffect(() => {
-      async function handlegetNotes() {
-        const response = await getNotes(internId)
-        setRecentNotes(response.data)
-        if (response.status === 1) {
-          setShowPopup(true)
-        }
-      }
-      handlegetNotes()
-    }, [recentNotes])
+    // useEffect(() => {
+    //   async function handlegetNotes() {
+    //     const response = await getNotes(internId)
+    //     setRecentNotes(response.data)
+    //     if (response.status === 1) {
+    //       setShowPopup(true)
+    //     }
+    //   }
+    //   handlegetNotes()
+    // }, [recentNotes])
     
   useEffect(() => {
     const loadInterns = async () => {
@@ -64,7 +64,7 @@ export default function intern() {
       <div className="internpage-container h-screen">
         <div className="intern-container-1 flex flex-col items-center">
           <div className="w-60 h-60 bg-gray-50 border border-black cursor-pointer rounded-full flex items-center justify-center mt-2">
-            <span className="text-9xl mb-10">{internData?.name?.charAt(0)}</span>
+            <span className="text-9xl mb-[20px]">{internData?.name?.charAt(0).toUpperCase()}</span>
           </div>
           <div className="min-h-[50px] flex items-center mt-4">
             <FontAwesomeIcon icon={faEnvelope} className="text-2xl cursor-pointer" onClick={() => sendEmail(internData.email)}/>

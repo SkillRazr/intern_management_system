@@ -15,28 +15,29 @@ export default function Attendance() {
     const [searchList, setSearchList] = useState([])
     const [searchQuery, setSearchQuery] = useState("")
     const [selectAllCheckbox, setSelectAllCheckbox] = useState(false)
-    const [checkboxValues, setCheckboxValues] = useState([]);
+    const [selectedDocIds, setselectedDocIds] = useState([]);
     const [showPopup, setShowPopup] = useState(false)
     const [selectedDates, setSelectedDates] = useState([Date.now()]);
-    console.log(checkboxValues);
+    const uniqueDocIdArray = [...new Set(selectedDocIds)];
+
 
     useEffect(() => {
-      setCheckboxValues(internsList.map(() => false));
-    }, [internsList]);
-
-    useEffect(() => {
-      setCheckboxValues(internsList.map(() => selectAllCheckbox));
+      if (selectAllCheckbox) {
+        setselectedDocIds(internsList.map(intern => intern.email));
+      } else {
+        setselectedDocIds([]);
+      }
     }, [selectAllCheckbox]);
 
-    function handleCheckboxChange (index, isChecked, email) {
+    function handleCheckboxChange (isChecked, email) {
       if (isChecked === true) {
-        const newValues = [...checkboxValues];
-        newValues[index] = email;
-        setCheckboxValues(newValues);  
+        const newValues = [...selectedDocIds];
+        newValues.push(email);
+        setselectedDocIds(newValues);  
       }else {
-        const newValues = [...checkboxValues]
-        newValues[index] = false
-        setCheckboxValues(newValues)
+        const newValues = [...selectedDocIds]
+        newValues.pop(email)
+        setselectedDocIds(newValues)
       }
     };
 
@@ -60,7 +61,7 @@ export default function Attendance() {
       async function handleUpdateAttendance(e) {
         e.preventDefault()
         try {
-          const response = await updateAttendance({docIds: ["jatinsharma@gmail1.com"], date: selectedDates})
+          const response = await updateAttendance({docIds: uniqueDocIdArray, date: selectedDates[0]})
           if (response.status === 1) {
             setShowPopup(true)
             setSelectAllCheckbox(false)
