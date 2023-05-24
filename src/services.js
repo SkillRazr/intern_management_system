@@ -6,7 +6,7 @@ export const getInterns = async () => {
     {
       headers: {
         "Content-Type": "application/json",
-        "skillrazr-sub-app": "interns!1234#@234_hello",
+        "skillrazr-sub-app": env["NEXT_PUBLIC_INTERN_API_KEY"],
       },
       method: "POST",
       body: JSON.stringify({}),
@@ -21,7 +21,7 @@ export const addIntern = async (payload) => {
     {
       headers: {
         "Content-Type": "application/json",
-        "skillrazr-sub-app": "interns!1234#@234_hello",
+        "skillrazr-sub-app": env["NEXT_PUBLIC_INTERN_API_KEY"],
       },
       method: "POST",
       body: JSON.stringify(payload),
@@ -35,7 +35,7 @@ export const saveNote = async (payload) => {
     {
       headers: {
         "Content-Type": "application/json",
-        "skillrazr-sub-app": "interns!1234#@234_hello",
+        "skillrazr-sub-app": env["NEXT_PUBLIC_INTERN_API_KEY"],
       },
       method: "POST",
       body: JSON.stringify(payload),
@@ -49,7 +49,7 @@ export const updateAttendance = async (payload) => {
     {
       headers: {
         "Content-Type": "application/json",
-        "skillrazr-sub-app": "interns!1234#@234_hello",
+        "skillrazr-sub-app": env["NEXT_PUBLIC_INTERN_API_KEY"],
       },
       method: "POST",
       body: JSON.stringify(payload),
