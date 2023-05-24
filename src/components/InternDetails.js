@@ -3,6 +3,7 @@ import Router, { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { saveNote } from "@/services";
+import Popup from "./Popup";
 
 export default function InternDetails({
   intern,
@@ -17,6 +18,7 @@ export default function InternDetails({
     new Date().toLocaleDateString("en-GB").split("/").reverse().join("-")
   );
   const router = useRouter();
+  const [showPopup, setShowPopup] = useState(false);
 
   async function handlesaveNote(e) {
     e.preventDefault();
@@ -30,6 +32,7 @@ export default function InternDetails({
       if (response.status === 1) {
         setNotes("");
         setOpenNotes(false);
+        setShowPopup(true);
       }
     } catch (error) {
       console.log(error.message);
@@ -132,6 +135,16 @@ export default function InternDetails({
             </button>
           </form>
         </div>
+      )}
+       {showPopup && (
+        <Popup
+          text={"success"}
+          iconColor={"green-700"}
+          textColor={"green-700"}
+          bgColor={"green-200"}
+          showPopup={showPopup}
+          setShowPopup={setShowPopup}
+        />
       )}
     </div>
   );

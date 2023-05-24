@@ -28,7 +28,6 @@ export default function Attendance() {
   }, [selectAllCheckbox, internsList]);
 
   function handleCheckboxChange(isChecked, email) {
-    console.log("kii", isChecked, email);
     if (isChecked === true) {
       const newValues = [...selectedDocIds];
       newValues.push(email);
@@ -69,8 +68,8 @@ export default function Attendance() {
       });
 
       if (response.status === 1) {
-        setShowPopup(true);
         setSelectAllCheckbox(false);
+        setShowPopup(true);
       }
     } catch (error) {
       console.log(error.message);

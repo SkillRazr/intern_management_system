@@ -1,7 +1,7 @@
 import { addIntern } from "@/services";
 import { useState } from "react";
 
-export default function AddInternModal({ onClose }) {
+export default function AddInternModal({ onClose, setShowPopup }) {
   const [name, setName] = useState("");
   const [mobileNo, setMobileNo] = useState(0);
   const [email, setEmail] = useState("");
@@ -24,12 +24,11 @@ export default function AddInternModal({ onClose }) {
         endDate,
         notes,
       });
-      console.log(response);
       if (response.status === 1) {
-        setShowPopup(true);
         const formElement = document.getElementById("intern-form");
         formElement.reset();
         onClose();
+        setShowPopup(true);
       }
     } catch (error) {
       console.log(error.message);

@@ -106,16 +106,6 @@ export default function Intern() {
           />
         )}
       </div>
-      <div className="intern-container-2 flex flex-col items-center">
-        <div className="intern-tags-container">
-          <p className="intern-tags">Add notes</p>
-          <FontAwesomeIcon icon={faAngleRight} />
-        </div>
-        <div className="intern-tags-container hover:text-red-700 hover:border-red-700">
-          <p className="intern-tags">Remove Intern</p>
-          <FontAwesomeIcon icon={faAngleRight} />
-        </div>
-      </div>
     </>
   );
 }

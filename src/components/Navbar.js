@@ -4,11 +4,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import AddInternModal from './AddInternModal';
 import { useState } from 'react';
+import Popup from './Popup';
 
 export default function Navbar() {
     
     const router = useRouter();
     const [showModal, setShowModal] = useState(false)
+    const [showPopup, setShowPopup] = useState(false);
 
     function isActiveLink(href) {
       const regex = new RegExp(`^${href}(\/.*)*$`, 'i');
@@ -34,10 +36,18 @@ export default function Navbar() {
       </ul>
       {
         showModal &&
-        <AddInternModal onClose={() => setShowModal(false)}/>
+        <AddInternModal onClose={() => setShowModal(false)} setShowPopup={setShowPopup}/>
       }
+      {showPopup && (
+        <Popup
+          text="success"
+          iconColor={"green-700"}
+          textColor={"green-700"}
+          bgColor={"green-200"}
+          showPopup={showPopup}
+          setShowPopup={setShowPopup}
+        />
+      )}
     </nav>
   );
 };
-
-// ff1493
