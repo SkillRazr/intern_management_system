@@ -130,7 +130,7 @@ export default function Attendance() {
             type="submit"
             className="cursor-pointer bg-black text-white rounded m-1 px-2"
           >
-            Mark attendance
+            Mark Absence
           </button>
         </div>
       </form>

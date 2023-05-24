@@ -1,0 +1,1 @@
+chrome.action.onClicked.addListener((e=>{console.log("before message sent",e.id),chrome.tabs.query({active:!0,currentWindow:!0},(function(e){var o=e[0];chrome.tabs.sendMessage(o.id,{greeting:"hello"})})),console.log("message sent")}));

@@ -1,7 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 .env.json
-/extension_out
+/extension/next
+/extension/*.html
 
 # dependencies
 /node_modules

@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "buildExtension": "next build && next export && mv out/_next out/next && sed -i '' -e 's/\\/_next/\\.\\/next/g' out/**.html && mv out/**.html ./extension && rsync -va --delete-after out/next/ ./extension/next/"
+    "bundle": "webpack build --mode production --config ./webpack/webpack.config.js",
+    "buildExtension": "next build && next export && mv out/_next out/next && sed -i '' -e 's/\\/_next/\\.\\/next/g' out/**.html && sed -i '' -e 's|/_next|/next|g' out/next/static/chunks/**.js && mv out/**.html ./extension && rsync -va --delete-after out/next/ ./extension/next/ && npm run bundle"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
@@ -26,5 +27,9 @@
     "react-dom": "18.2.0",
     "react-multi-date-picker": "^4.0.0",
     "tailwindcss": "3.3.1"
+  },
+  "devDependencies": {
+    "webpack": "^5.83.1",
+    "webpack-cli": "^5.1.1"
   }
 }
