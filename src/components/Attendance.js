@@ -3,7 +3,6 @@ import InternDetails from "./InternDetails";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { getInterns, updateAttendance } from "../services";
-import Popup from "./Popup";
 import DatePicker from "react-multi-date-picker";
 import Icon from "react-multi-date-picker/components/icon";
 import { toast } from "react-hot-toast";
