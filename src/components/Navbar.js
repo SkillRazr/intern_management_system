@@ -21,12 +21,12 @@ export default function Navbar() {
     <nav className='min-h-[50px]'>
       <ul className='flex items-center justify-evenly'>
         <li className={`${isActiveLink('/')} px-1`}>
-            <p className={`px-1`}>
+            <p className={`px-1 py-1`}>
                 <Link href="/" className='p-1.5'>Attendance</Link>
             </p>
         </li>
         <li className={`${isActiveLink('/notes')} px-1`}>
-            <p className={`px-1`}>
+            <p className={`px-1 py-1`}>
                 <Link href="/notes" className='p-1.5'>Notes</Link>
             </p>
         </li>

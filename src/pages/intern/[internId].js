@@ -10,6 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { getInterns } from "@/services";
 import Popup from "@/components/Popup";
+import { toast } from "react-hot-toast";
 
 export default function Intern() {
   const router = useRouter();
@@ -36,7 +37,7 @@ export default function Intern() {
   function sendEmail(content) {
     // send email
     navigator.clipboard.writeText(content);
-    setShowPopup(true);
+    toast.success("Email Copied")
   }
 
   return (

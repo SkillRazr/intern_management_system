@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { saveNote } from "@/services";
 import Popup from "./Popup";
+import { toast } from "react-hot-toast";
 
 export default function InternDetails({
   intern,
@@ -22,20 +23,26 @@ export default function InternDetails({
 
   async function handlesaveNote(e) {
     e.preventDefault();
-    try {
-      const email = intern.email;
-      const response = await saveNote({
-        docId: email,
-        date: Date.parse(noteDate),
-        note: { type: noteType, message: notes },
-      });
-      if (response.status === 1) {
-        setNotes("");
-        setOpenNotes(false);
-        setShowPopup(true);
-      }
-    } catch (error) {
-      console.log(error.message);
+    if (notes) {
+      try {
+        const email = intern.email;
+        const response = await saveNote({
+          docId: email,
+          date: Date.parse(noteDate),
+          note: { type: noteType, message: notes },
+        });
+        if (response.status === 1) {
+          setNotes("");
+          setOpenNotes(false);
+          toast.success("Notes Saved");
+        } else {
+          toast.error("Save Note Failed");
+        }
+      } catch (error) {
+        console.log(error.message);
+      }   
+    } else {
+      toast.error("Message/Note Empty")
     }
   }
 
@@ -98,6 +105,17 @@ export default function InternDetails({
             onSubmit={handlesaveNote}
           >
             <div className="flex items-center mb-4">
+              {(noteType !== "info" && noteType !== "alert") ? (
+                <input
+                  type="text"
+                  value={noteType}
+                  className="outline-none w-1/2 mr-1"
+                  placeholder="type..."
+                  onChange={(e) => {
+                    setNoteType(e.target.value);
+                  }}
+                />
+              ) :
               <select
                 id="notes"
                 name="notes"
@@ -109,7 +127,9 @@ export default function InternDetails({
               >
                 <option value="info">Info</option>
                 <option value="alert">Alert</option>
+                <option value="">Type...</option>
               </select>
+            }
               <input
                 type="date"
                 value={noteDate}
@@ -136,7 +156,7 @@ export default function InternDetails({
           </form>
         </div>
       )}
-       {showPopup && (
+      {showPopup && (
         <Popup
           text={"success"}
           iconColor={"green-700"}
