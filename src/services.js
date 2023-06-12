@@ -56,3 +56,17 @@ export const updateAttendance = async (payload) => {
     }
   ).then((resp) => resp.json());
 };
+
+export const postInternScores = async (payload) => {
+  return await fetch(
+    `http://127.0.0.1:5001/skillrazr-mobile/asia-south1/api/postScores`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "skillrazr-sub-app":  "interns!1234#@234_hello",
+      },
+      method: "POST",
+      body: JSON.stringify(payload),
+    }
+  ).then((resp) => resp.json());
+};
