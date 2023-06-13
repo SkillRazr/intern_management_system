@@ -1,4 +1,4 @@
-// import env from "../.env.json";
+import env from "../.env.json";
 
 export const getInterns = async () => {
   return await fetch(
@@ -63,7 +63,7 @@ export const postInternScores = async (payload) => {
     {
       headers: {
         "Content-Type": "application/json",
-        "skillrazr-sub-app":  "interns!1234#@234_hello",
+        "skillrazr-sub-app": env["NEXT_PUBLIC_INTERN_API_KEY"],
       },
       method: "POST",
       body: JSON.stringify(payload),

@@ -63,14 +63,14 @@ export default function InternDetails({
     if (scores) {
       try {
         const email = intern.email;
-        const response = await postInternScores({scores, email})
+        const response = await postInternScores({ scores, email });
         if (response.status === 1) {
-          setScores("")
-          setOpenScores(false)
+          setScores("");
+          setOpenScores(false);
           toast.success("Scores Saved");
         } else if (response.status === 0) {
-          setScores("")
-          setOpenScores(false)
+          setScores("");
+          setOpenScores(false);
           toast.error("Scores already given for this month");
         } else {
           toast.error("Save Score Failed");
@@ -79,7 +79,7 @@ export default function InternDetails({
         console.log(error);
       }
     } else {
-      toast.error("Scores cannot be empty")
+      toast.error("Scores cannot be empty");
     }
   }
 
@@ -213,8 +213,12 @@ export default function InternDetails({
             onSubmit={handleScoreSubmit}
           >
             <div className="mb-6">
-            <h2 className="text-3xl font-semibold text-center">Scores:</h2>
-            <h6 className="text-center text-xl font-medium mt-1.5">{intern.name}</h6>
+              <h2 className="text-3xl font-semibold text-center pb-4">
+                Add Monthly Scores
+              </h2>
+              <h6 className="text-xl font-medium mt-1.5">
+                For - {intern.name}
+              </h6>
             </div>
             <div className="flex mb-3 space-x-4">
               <div className="flex space-x-4 items-center">
@@ -264,7 +268,7 @@ export default function InternDetails({
               type="submit"
               className="w-full bg-black mt-8 text-white p-2 rounded"
             >
-              Give Scores
+              Submit
             </button>
           </form>
         </div>

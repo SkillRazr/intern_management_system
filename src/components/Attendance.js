@@ -14,9 +14,7 @@ export default function Attendance() {
   const [selectAllCheckbox, setSelectAllCheckbox] = useState(false);
   const [selectedDocIds, setselectedDocIds] = useState([]);
   const [showProceed, setShowProceed] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(
-    new Date().toLocaleDateString("en-ZA")
-  );
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString());
   const uniqueDocIdArray = [...new Set(selectedDocIds)];
 
   useEffect(() => {
@@ -60,29 +58,29 @@ export default function Attendance() {
   }, []);
 
   async function handleUpdateAttendance() {
-      try {
-        const response = await updateAttendance({
-          docIds: uniqueDocIdArray,
-          date: Date.parse(selectedDate),
-        });
-  
-        if (response.status === 1) {
-          setSelectAllCheckbox(false);
-          setShowProceed(false)
-          toast.success("Attendance Updated Successfully")
-        } else {
-          toast.error("Attendance Update Failed")
-        }
-      } catch (error) {
-        console.log(error.message);
-      }  
+    try {
+      const response = await updateAttendance({
+        docIds: uniqueDocIdArray,
+        date: Date.parse(selectedDate),
+      });
+
+      if (response.status === 1) {
+        setSelectAllCheckbox(false);
+        setShowProceed(false);
+        toast.success("Attendance Updated Successfully");
+      } else {
+        toast.error("Attendance Update Failed");
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
   }
 
   function handleMarkAbsence() {
     if (uniqueDocIdArray.length === 0) {
-      toast.error("Please Select Interns")
+      toast.error("Please Select Interns");
     } else {
-      setShowProceed(true)
+      setShowProceed(true);
     }
   }
 
@@ -130,7 +128,7 @@ export default function Attendance() {
           <DatePicker
             value={selectedDate}
             onChange={(newDate) => {
-              setSelectedDate(newDate);
+              setSelectedDate(new Date(newDate).toISOString());
             }}
             multiple={false}
             render={<Icon />}
@@ -147,19 +145,27 @@ export default function Attendance() {
         {internsList.length !== 0 && renderInternsList()}
       </div>
       {showProceed && (
-        <div className="w-full h-full fixed top-0 left-0 flex items-center justify-center" onClick={() => setShowProceed(false)}>
+        <div
+          className="w-full h-full fixed top-0 left-0 flex items-center justify-center"
+          onClick={() => setShowProceed(false)}
+        >
           <div
             className="modal-form-container flex flex-col justify-between rounded p-5 w-96 min-h-[200px] space-y-3"
             onClick={(e) => e.stopPropagation()}
           >
-            <p className="text-2xl font-semibold">Mark Absence for:</p>
+            <p className="text-2xl font-semibold text-center text-red-600">
+              Confirm Mark Absence
+            </p>
             <div>
-              <p className="font-medium">Date - {selectedDate}</p>
-              {
-                uniqueDocIdArray.map((id) => (
-                  <p className="mt-1">{id}</p>
-                ))
-              }
+              <p className="font-medium">
+                For Date - {new Date(selectedDate).toDateString()}
+              </p>
+              <p className="font-medium py-3 underline">Interns</p>
+              {uniqueDocIdArray.map((id) => (
+                <p className="mt-1" key={id}>
+                  {id}
+                </p>
+              ))}
             </div>
             <div className="flex items-center justify-evenly">
               <button
@@ -175,7 +181,6 @@ export default function Attendance() {
                 Proceed
               </button>
             </div>
-            
           </div>
         </div>
       )}
