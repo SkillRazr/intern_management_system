@@ -149,7 +149,7 @@ export default function InternDetails({
             onClick={(e) => e.stopPropagation()}
             onSubmit={handlesaveNote}
           >
-            <div className="flex items-center mb-4">
+            <div className="flex items-center mb-2">
               {noteType !== "info" && noteType !== "alert" ? (
                 <input
                   type="text"
@@ -184,6 +184,9 @@ export default function InternDetails({
                 }}
               />
             </div>
+            <h6 className="text-lg font-medium mb-2">
+                For - {intern.name}
+            </h6>
             <textarea
               type="text"
               placeholder="Notes..."
