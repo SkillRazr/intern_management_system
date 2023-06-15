@@ -9,7 +9,7 @@ import {
   faCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { getInterns } from "@/services";
-import Popup from "@/components/Popup";
+import { toast } from "react-hot-toast";
 
 export default function Intern() {
   const router = useRouter();
@@ -18,7 +18,6 @@ export default function Intern() {
   const [internData, setInternData] = useState(null);
   const [recentNotes, setRecentNotes] = useState(null);
   const [showNotes, setShowNotes] = useState(false);
-  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     const loadInterns = async () => {
@@ -36,7 +35,7 @@ export default function Intern() {
   function sendEmail(content) {
     // send email
     navigator.clipboard.writeText(content);
-    setShowPopup(true);
+    toast.success("Email Copied")
   }
 
   return (
@@ -94,16 +93,6 @@ export default function Intern() {
               </div>
             )}
           </div>
-        )}
-        {showPopup && (
-          <Popup
-            text={"success"}
-            iconColor={"green-700"}
-            textColor={"green-700"}
-            bgColor={"green-200"}
-            showPopup={showPopup}
-            setShowPopup={setShowPopup}
-          />
         )}
       </div>
     </>

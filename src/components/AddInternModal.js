@@ -1,7 +1,8 @@
 import { addIntern } from "@/services";
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 
-export default function AddInternModal({ onClose, setShowPopup }) {
+export default function AddInternModal({ onClose }) {
   const [name, setName] = useState("");
   const [mobileNo, setMobileNo] = useState(0);
   const [email, setEmail] = useState("");
@@ -28,7 +29,9 @@ export default function AddInternModal({ onClose, setShowPopup }) {
         const formElement = document.getElementById("intern-form");
         formElement.reset();
         onClose();
-        setShowPopup(true);
+        toast.success("Intern Added")
+      } else {
+        toast.error("Adding Intern Failed")
       }
     } catch (error) {
       console.log(error.message);

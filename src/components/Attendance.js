@@ -3,9 +3,9 @@ import InternDetails from "./InternDetails";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { getInterns, updateAttendance } from "../services";
-import Popup from "./Popup";
 import DatePicker from "react-multi-date-picker";
 import Icon from "react-multi-date-picker/components/icon";
+import { toast } from "react-hot-toast";
 
 export default function Attendance() {
   const [internsList, setInternsList] = useState([]);
@@ -13,10 +13,8 @@ export default function Attendance() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectAllCheckbox, setSelectAllCheckbox] = useState(false);
   const [selectedDocIds, setselectedDocIds] = useState([]);
-  const [showPopup, setShowPopup] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(
-    new Date().toLocaleDateString("en-ZA")
-  );
+  const [showProceed, setShowProceed] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString());
   const uniqueDocIdArray = [...new Set(selectedDocIds)];
 
   useEffect(() => {
@@ -59,8 +57,7 @@ export default function Attendance() {
     loadInterns();
   }, []);
 
-  async function handleUpdateAttendance(e) {
-    e.preventDefault();
+  async function handleUpdateAttendance() {
     try {
       const response = await updateAttendance({
         docIds: uniqueDocIdArray,
@@ -69,10 +66,21 @@ export default function Attendance() {
 
       if (response.status === 1) {
         setSelectAllCheckbox(false);
-        setShowPopup(true);
+        setShowProceed(false);
+        toast.success("Attendance Updated Successfully");
+      } else {
+        toast.error("Attendance Update Failed");
       }
     } catch (error) {
       console.log(error.message);
+    }
+  }
+
+  function handleMarkAbsence() {
+    if (uniqueDocIdArray.length === 0) {
+      toast.error("Please Select Interns");
+    } else {
+      setShowProceed(true);
     }
   }
 
@@ -104,7 +112,7 @@ export default function Attendance() {
           }}
         />
       </form>
-      <form className="flex justify-between" onSubmit={handleUpdateAttendance}>
+      <div className="flex justify-between">
         <label htmlFor="selectAll" className="flex ml-4 items-center">
           <p className="mr-2">Select all</p>
           <input
@@ -120,31 +128,61 @@ export default function Attendance() {
           <DatePicker
             value={selectedDate}
             onChange={(newDate) => {
-              setSelectedDate(newDate);
+              setSelectedDate(new Date(newDate).toISOString());
             }}
             multiple={false}
             render={<Icon />}
           />
           <button
-            type="submit"
             className="cursor-pointer bg-black text-white rounded m-1 px-2"
+            onClick={handleMarkAbsence}
           >
             Mark Absence
           </button>
         </div>
-      </form>
+      </div>
       <div className="interns-list-container flex flex-col items-center bg-black h-screen">
         {internsList.length !== 0 && renderInternsList()}
       </div>
-      {showPopup && (
-        <Popup
-          text={"success"}
-          iconColor={"green-700"}
-          textColor={"green-700"}
-          bgColor={"green-200"}
-          showPopup={showPopup}
-          setShowPopup={setShowPopup}
-        />
+      {showProceed && (
+        <div
+          className="w-full h-full fixed top-0 left-0 flex items-center justify-center"
+          onClick={() => setShowProceed(false)}
+        >
+          <div
+            className="modal-form-container flex flex-col justify-between rounded p-5 w-96 min-h-[200px] space-y-3"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <p className="text-2xl font-semibold text-center text-red-600">
+              Confirm Mark Absence
+            </p>
+            <div>
+              <p className="font-medium">
+                For Date - {new Date(selectedDate).toDateString()}
+              </p>
+              <p className="font-medium py-3 underline">Interns</p>
+              {uniqueDocIdArray.map((id) => (
+                <p className="mt-1" key={id}>
+                  {id}
+                </p>
+              ))}
+            </div>
+            <div className="flex items-center justify-evenly">
+              <button
+                className="w-1/3 bg-stone-200 mt-4 p-2 rounded"
+                onClick={() => setShowProceed(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="w-1/3 bg-black mt-4 text-white p-2 rounded"
+                onClick={handleUpdateAttendance}
+              >
+                Proceed
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );

@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  max-width: 350px;
+  max-width: 434px;
   width: 100%;
   float: right;
   margin-right: 30px;
@@ -23,7 +23,7 @@ body {
   width: 100%;
   outline: none;
   padding: 5px 5px 5px 10px;
-  border: 1px solid gainsboro;
+  border: 1px solid #dcdcdc;
   border-radius: 5px;
   font-size: 17px;
   font-weight: 600;
@@ -48,4 +48,14 @@ body {
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
+}
+
+.hide-number-arrow::-webkit-inner-spin-button,
+.hide-number-arrow::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.hide-number-arrow {
+  -moz-appearance: textfield; /* Firefox */
 }

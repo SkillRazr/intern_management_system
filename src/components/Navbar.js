@@ -4,13 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import AddInternModal from './AddInternModal';
 import { useState } from 'react';
-import Popup from './Popup';
 
 export default function Navbar() {
     
     const router = useRouter();
     const [showModal, setShowModal] = useState(false)
-    const [showPopup, setShowPopup] = useState(false);
 
     function isActiveLink(href) {
       const regex = new RegExp(`^${href}(\/.*)*$`, 'i');
@@ -21,12 +19,12 @@ export default function Navbar() {
     <nav className='min-h-[50px]'>
       <ul className='flex items-center justify-evenly'>
         <li className={`${isActiveLink('/')} px-1`}>
-            <p className={`px-1`}>
+            <p className={`px-1 py-1`}>
                 <Link href="/" className='p-1.5'>Attendance</Link>
             </p>
         </li>
         <li className={`${isActiveLink('/notes')} px-1`}>
-            <p className={`px-1`}>
+            <p className={`px-1 py-1`}>
                 <Link href="/notes" className='p-1.5'>Notes</Link>
             </p>
         </li>
@@ -36,18 +34,8 @@ export default function Navbar() {
       </ul>
       {
         showModal &&
-        <AddInternModal onClose={() => setShowModal(false)} setShowPopup={setShowPopup}/>
+        <AddInternModal onClose={() => setShowModal(false)}/>
       }
-      {showPopup && (
-        <Popup
-          text="success"
-          iconColor={"green-700"}
-          textColor={"green-700"}
-          bgColor={"green-200"}
-          showPopup={showPopup}
-          setShowPopup={setShowPopup}
-        />
-      )}
     </nav>
   );
 };
