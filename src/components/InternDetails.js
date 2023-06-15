@@ -150,31 +150,22 @@ export default function InternDetails({
             onSubmit={handlesaveNote}
           >
             <div className="flex items-center mb-2">
-              {noteType !== "info" && noteType !== "alert" ? (
-                <input
-                  type="text"
-                  value={noteType}
-                  className="outline-none w-1/2 mr-1"
-                  placeholder="type..."
-                  onChange={(e) => {
-                    setNoteType(e.target.value);
-                  }}
-                />
-              ) : (
-                <select
-                  id="notes"
-                  name="notes"
-                  value={noteType}
-                  className="outline-none w-1/2 mr-1"
-                  onChange={(e) => {
-                    setNoteType(e.target.value);
-                  }}
-                >
-                  <option value="info">Info</option>
-                  <option value="alert">Alert</option>
-                  <option value="">Type...</option>
-                </select>
-              )}
+              <select
+                id="notes"
+                name="notes"
+                value={noteType}
+                className="outline-none w-1/2 mr-1"
+                onChange={(e) => {
+                  setNoteType(e.target.value);
+                }}
+              >
+                <option value="info">Info</option>
+                <option value="alert">Alert</option>
+                <option value="praise">Praise</option>
+                <option value="monthEnd">Month End</option>
+                <option value="finalNote">Final Note</option>
+              </select>
+
               <input
                 type="date"
                 value={noteDate}
@@ -184,9 +175,7 @@ export default function InternDetails({
                 }}
               />
             </div>
-            <h6 className="text-lg font-medium mb-2">
-                For - {intern.name}
-            </h6>
+            <h6 className="text-lg font-medium mb-2">For - {intern.name}</h6>
             <textarea
               type="text"
               placeholder="Notes..."
