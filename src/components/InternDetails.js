@@ -24,6 +24,9 @@ export default function InternDetails({
   const [noteDate, setNoteDate] = useState(() =>
     new Date().toLocaleDateString("en-GB").split("/").reverse().join("-")
   );
+  const [monthDate, setMonthDate] = useState(new Date().toISOString());
+  const [showProceed, setShowProceed] = useState(false);
+
   const router = useRouter();
 
   const handleScoreChange = (event) => {
@@ -60,14 +63,24 @@ export default function InternDetails({
 
   async function handleScoreSubmit(e) {
     e.preventDefault();
-    if (scores) {
+    if (
+      scores.codeReview &&
+      scores.development &&
+      scores.learning &&
+      scores.learning
+    ) {
       try {
         const email = intern.email;
-        const response = await postInternScores({ scores, email });
+        const response = await postInternScores({
+          scores,
+          email,
+          date: monthDate,
+        });
         if (response.status === 1) {
           setScores("");
           setOpenScores(false);
           toast.success("Scores Saved");
+          setShowProceed(false);
         } else if (response.status === 0) {
           setScores("");
           setOpenScores(false);
@@ -162,8 +175,10 @@ export default function InternDetails({
                 <option value="info">Info</option>
                 <option value="alert">Alert</option>
                 <option value="praise">Praise</option>
-                <option value="monthEnd">Month End</option>
-                <option value="finalNote">Final Note</option>
+                <option disabled>-----</option>
+                <option value="summary">Summary</option>
+                <option value="learning">Learning Note</option>
+                <option value="others">others</option>
               </select>
 
               <input
@@ -202,12 +217,27 @@ export default function InternDetails({
           <form
             className="modal-form-container flex flex-col rounded py-6 px-3"
             onClick={(e) => e.stopPropagation()}
-            onSubmit={handleScoreSubmit}
+            onSubmit={() => {
+              setShowProceed(true);
+              setOpenScores(false);
+            }}
           >
             <div className="mb-6">
               <h2 className="text-3xl font-semibold text-center pb-4">
                 Add Monthly Scores
               </h2>
+              <label htmlFor="month" className="intern-form-label">
+                <p>For month</p>
+                <input
+                  type="date"
+                  name="month"
+                  id="month"
+                  className="intern-form-input"
+                  onChange={(e) => {
+                    setMonthDate(new Date(e.target.value).toISOString());
+                  }}
+                ></input>
+              </label>
               <h6 className="text-xl font-medium mt-1.5">
                 For - {intern.name}
               </h6>
@@ -263,6 +293,43 @@ export default function InternDetails({
               Submit
             </button>
           </form>
+        </div>
+      )}
+
+      {showProceed && (
+        <div
+          className="w-full h-full fixed top-0 left-0 flex items-center justify-center"
+          onClick={() => setShowProceed(false)}
+        >
+          <div
+            className="modal-form-container flex flex-col justify-between rounded p-5 w-96 min-h-[200px] space-y-3"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <p className="text-2xl font-semibold text-center text-red-600">
+              Confirm monthly score submission
+            </p>
+            <div>
+              <p className="font-medium">
+                For Month - {new Date(monthDate).toDateString()}
+              </p>
+            </div>
+            <div className="flex items-center justify-evenly">
+              <button
+                className="w-1/3 bg-stone-200 mt-4 p-2 rounded"
+                onClick={() => {
+                  setShowProceed(false), setOpenScores(true);
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                className="w-1/3 bg-black mt-4 text-white p-2 rounded"
+                onClick={handleScoreSubmit}
+              >
+                Proceed
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
