@@ -36,3 +36,17 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## Manifest JSON File Notes :-
+
+Add `"chrome_url_overrides": {
+    "newtab": "index.html"
+  },` section if you want the chrome extention opens when you open a new tab
+
+````"content_scripts": [
+  {
+    "matches": ["chrome://*/*"],
+    "js": ["content.js"]
+  }
+],``` matches should be restricted to ["chrome://*/*"] otherwise the extension can be opened on any page and even if you are not opening the extension it loads and runs extension code whatever page you visit.
+````
