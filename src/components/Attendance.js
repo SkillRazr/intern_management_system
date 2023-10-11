@@ -15,6 +15,9 @@ export default function Attendance() {
   const [selectedDocIds, setselectedDocIds] = useState([]);
   const [showProceed, setShowProceed] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString());
+  const [selectedMonth, setSelectedMonth] = useState(
+    new Date().toString().split(" ")[1]
+  );
   const uniqueDocIdArray = [...new Set(selectedDocIds)];
 
   useEffect(() => {
@@ -86,15 +89,19 @@ export default function Attendance() {
 
   function renderInternsList() {
     const list = searchList.length === 0 ? internsList : searchList;
-    return list.map((intern, index) => (
-      <InternDetails
-        key={index}
-        intern={intern}
-        handleCheckboxChange={handleCheckboxChange}
-        index={index}
-        selectAllCheckbox={selectAllCheckbox}
-      />
-    ));
+    return list
+      .filter((user) =>
+        user.internshipId.toLowerCase().startsWith(selectedMonth.toLowerCase())
+      )
+      .map((intern, index) => (
+        <InternDetails
+          key={index}
+          intern={intern}
+          handleCheckboxChange={handleCheckboxChange}
+          index={index}
+          selectAllCheckbox={selectAllCheckbox}
+        />
+      ));
   }
 
   return (
@@ -112,7 +119,7 @@ export default function Attendance() {
           }}
         />
       </form>
-      <div className="flex justify-between">
+      <div className="flex justify-between items-center">
         <label htmlFor="selectAll" className="flex ml-4 items-center">
           <p className="mr-2">Select all</p>
           <input
@@ -124,11 +131,30 @@ export default function Attendance() {
             }}
           />
         </label>
+        <label htmlFor="showAll" className="flex ml-4 items-center">
+          <p className="mr-2">Show all</p>
+          <input
+            type="checkbox"
+            className="w-4 h-4"
+            id="showAll"
+            onChange={(e) => {
+              if (selectedMonth.length > 0) {
+                setSelectedMonth("");
+              } else {
+                setSelectedMonth(new Date().toString().split(" ")[1]);
+              }
+            }}
+          />
+        </label>
+
+        {/* <p>Show all</p> */}
         <div className="flex items-center">
           <DatePicker
             value={selectedDate}
             onChange={(newDate) => {
-              setSelectedDate(new Date(newDate).toISOString());
+              setSelectedMonth(
+                selectedDate.toLocaleString("default", { month: "short" })
+              );
             }}
             multiple={false}
             render={<Icon />}
