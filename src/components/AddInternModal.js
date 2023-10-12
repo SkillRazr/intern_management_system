@@ -1,16 +1,37 @@
 import { addIntern } from "@/services";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 
-export default function AddInternModal({ onClose }) {
-  const [name, setName] = useState("");
-  const [mobileNo, setMobileNo] = useState(0);
-  const [email, setEmail] = useState("");
-  const [github, setGithub] = useState("");
-  const [linkedin, setLinkedin] = useState("");
-  const [joinDate, setJoinDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [notes, setNotes] = useState("");
+  
+export default function AddInternModal({ onClose, showModal  })   {
+  const [formData, setformData] = useState(
+    JSON.parse(localStorage.getItem("formData")) || {}
+  );
+  const [name, setName] = useState(formData.name || "");
+  const [mobileNo, setMobileNo] = useState(formData.mobileNo || "");
+  const [email, setEmail] = useState(formData.email || "");
+  const [github, setGithub] = useState(formData.github|| "");;
+  const [linkedin, setLinkedin] = useState(formData.linkedin || "");
+  const [joinDate, setJoinDate] = useState(formData.joinDate || "");
+  const [endDate, setEndDate] = useState(formData.endDate || "");
+  const [notes, setNotes] = useState(formData.notes || "");
+
+  
+
+  const saveFormData = () => {
+    const formData = {
+      name,
+      mobileNo,
+      email,
+      github,
+      linkedin,
+      joinDate,
+      endDate,
+      notes,
+    };
+    localStorage.setItem("formData", JSON.stringify(formData));
+  };
+  
 
   const internForm = async (e) => {
     e.preventDefault();
@@ -30,6 +51,7 @@ export default function AddInternModal({ onClose }) {
         formElement.reset();
         onClose();
         toast.success("Intern Added")
+        localStorage.removeItem("formData")
       } else {
         toast.error("Adding Intern Failed")
       }
@@ -37,6 +59,13 @@ export default function AddInternModal({ onClose }) {
       console.log(error.message);
     }
   };
+
+  useEffect(() => {
+    saveFormData();
+  }, );
+
+
+
 
   return (
     <div
@@ -62,6 +91,7 @@ export default function AddInternModal({ onClose }) {
                 type="text"
                 name="name"
                 id="name"
+                value={name}
                 className="intern-form-input"
                 required
                 onChange={(e) => {
@@ -75,6 +105,7 @@ export default function AddInternModal({ onClose }) {
                 type="tel"
                 name="phoneNo"
                 id="phoneNo"
+                value={mobileNo}
                 pattern="^\+\d{2}\s\d{10}$"
                 className="intern-form-input"
                 placeholder="+91 1234567890"
@@ -92,6 +123,7 @@ export default function AddInternModal({ onClose }) {
               type="email"
               name="email"
               id="email"
+              value={email}
               pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
               className="intern-form-input"
               required
@@ -107,6 +139,7 @@ export default function AddInternModal({ onClose }) {
               type="url"
               name="github"
               id="github"
+              value={github}
               pattern="^https:\/\/github\.com\/.+$"
               className="intern-form-input"
               onChange={(e) => {
@@ -121,6 +154,7 @@ export default function AddInternModal({ onClose }) {
               type="url"
               name="linkedin"
               id="linkedin"
+              value={linkedin}
               pattern="^https:\/\/linkedin\.com\/.+$"
               className="intern-form-input"
               onChange={(e) => {
@@ -136,6 +170,7 @@ export default function AddInternModal({ onClose }) {
                 type="date"
                 name="join"
                 id="join"
+                value={joinDate}
                 className="intern-form-input"
                 required
                 onChange={(e) => {
@@ -149,6 +184,7 @@ export default function AddInternModal({ onClose }) {
                 type="date"
                 name="end"
                 id="end"
+                value={endDate}
                 className="intern-form-input"
                 onChange={(e) => {
                   setEndDate(e.target.value);
@@ -163,6 +199,7 @@ export default function AddInternModal({ onClose }) {
               type="text"
               name="notes"
               id="notes"
+              value={notes}
               className="intern-form-input max-h-24"
               onChange={(e) => {
                 setNotes(e.target.value);
