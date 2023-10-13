@@ -14,10 +14,11 @@ export default function Attendance() {
   const [selectAllCheckbox, setSelectAllCheckbox] = useState(false);
   const [selectedDocIds, setselectedDocIds] = useState([]);
   const [showProceed, setShowProceed] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString());
-  const [selectedMonth, setSelectedMonth] = useState(
-    new Date().toString().split(" ")[1]
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split("T")[0]
   );
+  const [showAll, setShowAll] = useState(false);
+
   const uniqueDocIdArray = [...new Set(selectedDocIds)];
 
   useEffect(() => {
@@ -47,6 +48,9 @@ export default function Attendance() {
     );
     setSearchList(filteredList);
   }, [searchQuery, internsList]);
+  console.log(internsList);
+  // console.log( internsList[1].endDate.split("T")[0] )
+  // console.log( internsList[1].joinDate )
 
   useEffect(() => {
     const loadInterns = async () => {
@@ -90,11 +94,25 @@ export default function Attendance() {
   function renderInternsList() {
     const list = searchList.length === 0 ? internsList : searchList;
     return list
-      .filter((user) =>
-        user.internshipId.toLowerCase().startsWith(selectedMonth.toLowerCase())
-      )
+      .filter((user) => {
+        const currentDate = new Date();
+        currentDate.setDate(currentDate.getDate() + 1);
+        const endDate = user.endDate ?? currentDate;
+
+        const userStartDate = new Date(user?.joinDate);
+        const userEndDate = new Date(endDate);
+
+        console.log(`start : ${userStartDate}`);
+        console.log(`End : ${userEndDate}`);
+
+        const isDateInRange =
+          userStartDate.getTime() <= new Date(selectedDate).getTime() &&
+          userEndDate.getTime() >= new Date(selectedDate).getTime();
+        return isDateInRange;
+      })
       .map((intern, index) => (
         <InternDetails
+          data-testid="internlist"
           key={index}
           intern={intern}
           handleCheckboxChange={handleCheckboxChange}
@@ -102,6 +120,19 @@ export default function Attendance() {
           selectAllCheckbox={selectAllCheckbox}
         />
       ));
+  }
+
+  function renderFullInterns() {
+    const list = showAll ? internsList : searchList; // Use showAllMode state to toggle filtering
+    return list.map((intern, index) => (
+      <InternDetails
+        key={index}
+        intern={intern}
+        handleCheckboxChange={handleCheckboxChange}
+        index={index}
+        selectAllCheckbox={selectAllCheckbox}
+      />
+    ));
   }
 
   return (
@@ -137,12 +168,8 @@ export default function Attendance() {
             type="checkbox"
             className="w-4 h-4"
             id="showAll"
-            onChange={(e) => {
-              if (selectedMonth.length > 0) {
-                setSelectedMonth("");
-              } else {
-                setSelectedMonth(new Date().toString().split(" ")[1]);
-              }
+            onChange={() => {
+              setShowAll(!showAll);
             }}
           />
         </label>
@@ -152,9 +179,7 @@ export default function Attendance() {
           <DatePicker
             value={selectedDate}
             onChange={(newDate) => {
-              setSelectedMonth(
-                selectedDate.toLocaleString("default", { month: "short" })
-              );
+              setSelectedDate(new Date(newDate));
             }}
             multiple={false}
             render={<Icon />}
@@ -167,9 +192,15 @@ export default function Attendance() {
           </button>
         </div>
       </div>
-      <div className="interns-list-container flex flex-col items-center bg-black h-screen">
-        {internsList.length !== 0 && renderInternsList()}
-      </div>
+      {!showAll ? (
+        <div className="interns-list-container flex flex-col items-center bg-black h-screen">
+          {internsList.length !== 0 && renderInternsList()}
+        </div>
+      ) : (
+        <div className="interns-list-container flex flex-col items-center bg-black h-screen">
+          {internsList.length !== 0 && renderFullInterns()}
+        </div>
+      )}
       {showProceed && (
         <div
           className="w-full h-full fixed top-0 left-0 flex items-center justify-center"
