@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "bundle": "webpack build --mode production --config ./webpack/webpack.config.js",
-    "buildExtension": "next build && next export && mv out/_next out/next && sed -i '' -e 's/\\/_next/\\.\\/next/g' out/**.html && sed -i '' -e 's|/_next|/next|g' out/next/static/chunks/**.js && mv out/**.html ./extension && rsync -va --delete-after out/next/ ./extension/next/ && npm run bundle"
+    "buildExtension": "next build && next export && mv out/_next out/next && sed -i '' -e 's/\\/_next/\\.\\/next/g' out/**.html && sed -i '' -e 's|/_next|/next|g' out/next/static/chunks/**.js && mv out/**.html ./extension && rsync -va --delete-after out/next/ ./extension/next/ && npm run bundle",
+    "test": "jest --watch --detectOpenHandles"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
@@ -30,6 +31,14 @@
     "tailwindcss": "3.3.1"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "6.1.2",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "14.4.3",
+    "@types/jest": "29.5.5",
+    "@types/react": "18.2.21",
+    "jest": "29.6.4",
+    "jest-environment-jsdom": "29.6.4",
+    "typescript": "5.2.2",
     "webpack": "^5.83.1",
     "webpack-cli": "^5.1.1"
   }

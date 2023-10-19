@@ -48,9 +48,6 @@ export default function Attendance() {
     );
     setSearchList(filteredList);
   }, [searchQuery, internsList]);
-  console.log(internsList);
-  // console.log( internsList[1].endDate.split("T")[0] )
-  // console.log( internsList[1].joinDate )
 
   useEffect(() => {
     const loadInterns = async () => {
@@ -123,7 +120,8 @@ export default function Attendance() {
   }
 
   function renderFullInterns() {
-    const list = showAll ? internsList : searchList; // Use showAllMode state to toggle filtering
+    const list = showAll ? internsList : searchList;
+    // Use showAllMode state to toggle filtering
     return list.map((intern, index) => (
       <InternDetails
         key={index}
@@ -143,6 +141,8 @@ export default function Attendance() {
           type="text"
           name="search"
           value={searchQuery}
+          role="internSearchBox"
+          title="intern search"
           className="p-2 outline-none w-full"
           placeholder="Enter intern name..."
           onChange={(e) => {
@@ -152,7 +152,10 @@ export default function Attendance() {
       </form>
       <div className="flex justify-between items-center">
         <label htmlFor="selectAll" className="flex ml-4 items-center">
-          <p className="mr-2">Select all</p>
+          <h4 className="mr-2" 
+          checked={false} data-testid="selectAll" >
+            Select all
+          </h4>
           <input
             type="checkbox"
             className="w-4 h-4"
@@ -163,7 +166,7 @@ export default function Attendance() {
           />
         </label>
         <label htmlFor="showAll" className="flex ml-4 items-center">
-          <p className="mr-2">Show all</p>
+          <h4 className="mr-2" data-testid="showAll" checked={false}>Show all</h4>
           <input
             type="checkbox"
             className="w-4 h-4"
@@ -175,7 +178,7 @@ export default function Attendance() {
         </label>
 
         {/* <p>Show all</p> */}
-        <div className="flex items-center">
+        <div className="flex items-center" data-testid="select-date">
           <DatePicker
             value={selectedDate}
             onChange={(newDate) => {
@@ -186,6 +189,7 @@ export default function Attendance() {
           />
           <button
             className="cursor-pointer bg-black text-white rounded m-1 px-2"
+            data-testid="attendance-confimation"
             onClick={handleMarkAbsence}
           >
             Mark Absence
