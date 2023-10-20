@@ -3,10 +3,25 @@ import { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 
   
-export default function AddInternModal({ onClose, showModal  })   {
+export default function AddInternModal({ onClose, showModal  })  {
   const [formData, setformData] = useState(
     JSON.parse(localStorage.getItem("formData")) || {}
   );
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      const modalContainer = document.querySelector(".modal-container");
+      if (!modalContainer.contains(event.target)) {
+        // If the user clicked outside the modal dialog, show an alert message:
+        alert("Please fill the required details");
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
+
   const [name, setName] = useState(formData.name || "");
   const [mobileNo, setMobileNo] = useState(formData.mobileNo || "");
   const [email, setEmail] = useState(formData.email || "");
@@ -66,11 +81,11 @@ export default function AddInternModal({ onClose, showModal  })   {
 
 
 
-
+  
   return (
     <div
       className="modal-container fixed top-0 left-0 w-full h-full flex items-center justify-center"
-      onClick={() => onClose()}
+      //onClick={() => onClose()}
     >
       <div
         className="modal-form-container max-w-md bg-white rounded p-6"
