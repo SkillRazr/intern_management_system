@@ -141,6 +141,7 @@ export default function Attendance() {
           type="text"
           name="search"
           value={searchQuery}
+          data-testid="searchtest"
           role="internSearchBox"
           title="intern search"
           className="p-2 outline-none w-full"
