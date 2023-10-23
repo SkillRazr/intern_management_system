@@ -14,7 +14,11 @@ export default function Attendance() {
   const [selectAllCheckbox, setSelectAllCheckbox] = useState(false);
   const [selectedDocIds, setselectedDocIds] = useState([]);
   const [showProceed, setShowProceed] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString());
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
+  const [showAll, setShowAll] = useState(false);
+
   const uniqueDocIdArray = [...new Set(selectedDocIds)];
 
   useEffect(() => {
@@ -86,6 +90,38 @@ export default function Attendance() {
 
   function renderInternsList() {
     const list = searchList.length === 0 ? internsList : searchList;
+    return list
+      .filter((user) => {
+        const currentDate = new Date();
+        currentDate.setDate(currentDate.getDate() + 1);
+        const endDate = user.endDate ?? currentDate;
+
+        const userStartDate = new Date(user?.joinDate);
+        const userEndDate = new Date(endDate);
+
+        console.log(`start : ${userStartDate}`);
+        console.log(`End : ${userEndDate}`);
+
+        const isDateInRange =
+          userStartDate.getTime() <= new Date(selectedDate).getTime() &&
+          userEndDate.getTime() >= new Date(selectedDate).getTime();
+        return isDateInRange;
+      })
+      .map((intern, index) => (
+        <InternDetails
+          data-testid="internlist"
+          key={index}
+          intern={intern}
+          handleCheckboxChange={handleCheckboxChange}
+          index={index}
+          selectAllCheckbox={selectAllCheckbox}
+        />
+      ));
+  }
+
+  function renderFullInterns() {
+    const list = showAll ? internsList : searchList;
+    // Use showAllMode state to toggle filtering
     return list.map((intern, index) => (
       <InternDetails
         key={index}
@@ -105,6 +141,9 @@ export default function Attendance() {
           type="text"
           name="search"
           value={searchQuery}
+          data-testid="searchtest"
+          role="internSearchBox"
+          title="intern search"
           className="p-2 outline-none w-full"
           placeholder="Enter intern name..."
           onChange={(e) => {
@@ -112,9 +151,12 @@ export default function Attendance() {
           }}
         />
       </form>
-      <div className="flex justify-between">
+      <div className="flex justify-between items-center">
         <label htmlFor="selectAll" className="flex ml-4 items-center">
-          <p className="mr-2">Select all</p>
+          <h4 className="mr-2" 
+          checked={false} data-testid="selectAll" >
+            Select all
+          </h4>
           <input
             type="checkbox"
             className="w-4 h-4"
@@ -124,26 +166,46 @@ export default function Attendance() {
             }}
           />
         </label>
-        <div className="flex items-center">
+        <label htmlFor="showAll" className="flex ml-4 items-center">
+          <h4 className="mr-2" data-testid="showAll" checked={false}>Show all</h4>
+          <input
+            type="checkbox"
+            className="w-4 h-4"
+            id="showAll"
+            onChange={() => {
+              setShowAll(!showAll);
+            }}
+          />
+        </label>
+
+        {/* <p>Show all</p> */}
+        <div className="flex items-center" data-testid="select-date">
           <DatePicker
             value={selectedDate}
             onChange={(newDate) => {
-              setSelectedDate(new Date(newDate).toISOString());
+              setSelectedDate(new Date(newDate));
             }}
             multiple={false}
             render={<Icon />}
           />
           <button
             className="cursor-pointer bg-black text-white rounded m-1 px-2"
+            data-testid="attendance-confimation"
             onClick={handleMarkAbsence}
           >
             Mark Absence
           </button>
         </div>
       </div>
-      <div className="interns-list-container flex flex-col items-center bg-black h-screen">
-        {internsList.length !== 0 && renderInternsList()}
-      </div>
+      {!showAll ? (
+        <div className="interns-list-container flex flex-col items-center bg-black h-screen">
+          {internsList.length !== 0 && renderInternsList()}
+        </div>
+      ) : (
+        <div className="interns-list-container flex flex-col items-center bg-black h-screen">
+          {internsList.length !== 0 && renderFullInterns()}
+        </div>
+      )}
       {showProceed && (
         <div
           className="w-full h-full fixed top-0 left-0 flex items-center justify-center"
